@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOSSIER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Размытый фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(100, 150, 200, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(150, 100, 200, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .title {
+            font-size: 4em;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #b8b8ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(184, 184, 255, 0.3);
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            letter-spacing: 4px;
+            color: #8080a0;
+            margin-bottom: 5px;
+        }
+
+        .divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #6060c0, transparent);
+            margin: 20px auto;
+        }
+
+        /* Карточки информации */
+        .section {
+            background: rgba(20, 25, 45, 0.6);
+            border: 1px solid rgba(100, 120, 180, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: rgba(100, 120, 180, 0.4);
+            box-shadow: 0 12px 40px rgba(100, 120, 180, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #9090ff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            border-bottom: 2px solid rgba(144, 144, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label {
+            font-size: 0.85em;
+            color: #7080a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 1.1em;
+            color: #d0d0ff;
+            word-break: break-word;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 8px 0;
+            color: #c0c0e0;
+            border-bottom: 1px solid rgba(100, 120, 180, 0.1);
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .interest-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .interest-name {
+            color: #9090ff;
+            font-weight: 500;
+            min-width: 150px;
+        }
+
+        .interest-duration {
+            color: #7080a0;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: rgba(100, 120, 180, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid rgba(100, 120, 180, 0.2);
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            color: #9090ff;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: #7080a0;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .link-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(100, 120, 180, 0.15);
+            border: 1px solid rgba(100, 120, 180, 0.3);
+            border-radius: 6px;
+            color: #9090ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .link-btn:hover {
+            background: rgba(100, 120, 180, 0.25);
+            border-color: rgba(100, 120, 180, 0.5);
+            box-shadow: 0 4px 12px rgba(100, 120, 180, 0.2);
+        }
+
+        .usernames {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .username-tag {
+            background: rgba(144, 144, 255, 0.15);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #b8b8ff;
+            border: 1px solid rgba(144, 144, 255, 0.2);
+        }
+
+        .names-list {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(100, 120, 180, 0.05);
+            border-radius: 6px;
+        }
+
+        .names-list li {
+            padding: 6px 0;
+            color: #c0c0e0;
+            font-size: 0.95em;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #6080a0;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5em;
+                letter-spacing: 4px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="subtitle">PERSONAL DOSSIER</div>
+            <h1 class="title">DOSSIER</h1>
+            <div class="divider"></div>
+        </header>
+
+        <!-- Основная информация -->
+        <section class="section">
+            <h2 class="section-title">ОСНОВНЫЕ ДАННЫЕ</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Полное имя</span>
+                    <span class="value">Курносова Ольга Николаевна</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Дата рождения</span>
+                    <span class="value">13.07.1988</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Возраст</span>
+                    <span class="value">37 лет</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Регион</span>
+                    <span class="value">г. Санкт-Петербург, ЛО</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контактная информация -->
+        <section class="section">
+            <h2 class="section-title">КОНТАКТЫ</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Телефон</span>
+                    <span class="value">+7 (981) 809-20-59</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Оператор</span>
+                    <span class="value">МТС</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Email</span>
+                    <span class="value">unadezda00@gmail.com</span>
+                </div>
+            </div>
+
+            <div class="links-container">
+                <a href="https://vk.com/id733148411" class="link-btn" target="_blank">
+                    VK
+                </a>
+                <a href="https://t.me/hamrk13" class="link-btn" target="_blank">
+                    Telegram
+                </a>
+                <a href="https://wa.me/+79818092059" class="link-btn" target="_blank">
+                    WhatsApp
+                </a>
+            </div>
+        </section>
+
+        <!-- Социальные сети -->
+        <section class="section">
+            <h2 class="section-title">СОЦИАЛЬНЫЕ СЕТИ</h2>
+            
+            <div style="margin-bottom: 25px;">
+                <div class="label">VKontakte</div>
+                <div class="value" style="margin-top: 8px;">Арина Филатова (7.10.1981)</div>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <div class="label">Telegram</div>
+                <div class="usernames">
+                    <span class="username-tag">@hamrk13</span>
+                    <span class="username-tag">ID: 7459597819</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Telegram Usernames</div>
+                <div class="usernames" style="margin-top: 10px;">
+                    <span class="username-tag">@hamrk13</span>
+                    <span class="username-tag">@diana137a</span>
+                    <span class="username-tag">@Dstygik</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Интересы -->
+        <section class="section">
+            <h2 class="section-title">ИНТЕРЕСЫ</h2>
+            <div class="interest-item">
+                <span class="interest-name">Мракобесие</span>
+                <span class="interest-duration">~1 неделя</span>
+            </div>
+            <div class="interest-item">
+                <span class="interest-name">Гадание</span>
+                <span class="interest-duration">~1 неделя</span>
+            </div>
+            <div class="interest-item">
+                <span class="interest-name">Развлечение</span>
+                <span class="interest-duration">постоянно</span>
+            </div>
+            <div class="interest-item">
+                <span class="interest-name">Обсуждение знаменитостей</span>
+                <span class="interest-duration">~1 неделя</span>
+            </div>
+            <div class="interest-item">
+                <span class="interest-name">Кино</span>
+                <span class="interest-duration">~несколько месяцев</span>
+            </div>
+        </section>
+
+        <!-- Статистика Telegram -->
+        <section class="section">
+            <h2 class="section-title">TELEGRAM СТАТИСТИКА</h2>
+            <div style="color: #c0c0e0; margin-bottom: 20px;">
+                Период: 23.09.2024 - 26.02.2026
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">292</div>
+                    <div class="stat-label">Сообщений</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">29</div>
+                    <div class="stat-label">Чатов</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">71.92%</div>
+                    <div class="stat-label">Реплаи</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; padding: 15px; background: rgba(100, 120, 180, 0.05); border-radius: 6px;">
+                <div class="label">Топ слова</div>
+                <div style="margin-top: 12px; color: #c0c0e0; line-height: 1.8;">
+                    пожалуиста, обожаю, привет, спасибо, блгодаря, кошка
+                </div>
+            </div>
+        </section>
+
+        <!-- Подарки -->
+        <section class="section">
+            <h2 class="section-title">ПОЛУЧЕННЫЕ ПОДАРКИ</h2>
+            <ul class="info-list">
+                <li>2026-03-17 — саша (@juvvyt)</li>
+                <li>2026-03-07 — vareșkhaց (@Varenibi)</li>
+                <li>2026-02-28 — Neko Chan (@StintOneLove)</li>
+                <li>2026-01-08 — Нyre (@XZcepredymat)</li>
+                <li>2025-12-31 — [empty] (@shimpliiii)</li>
+                <li>2025-03-20 — miau (@naiver_narr)</li>
+                <li>2025-02-08 — диана (@hamrk13)</li>
+            </ul>
+        </section>
+
+        <!-- Регистрации -->
+        <section class="section">
+            <h2 class="section-title">РЕГИСТРАЦИИ НА САЙТАХ</h2>
+            <ul class="info-list">
+                <li>adengi.ru</li>
+                <li>galamart.ru</li>
+                <li>cdek.ru</li>
+                <li>dom.ru</li>
+            </ul>
+        </section>
+
+        <footer class="footer">
+            © 2026 Personal Dossier • Confidential
+        </footer>
+    </div>
+</body>
+</html>
